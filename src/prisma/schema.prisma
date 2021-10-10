@@ -11,10 +11,21 @@ generator client {
 }
 
 model User {
-  id         Int      @id @unique
-  email      String   @unique
-  password   String
+  id         String      @id @unique
   idDiscord  String   @unique
   avatar_url String
-  insertedAt DateTime
+  name String
+  discriminator String
+  system Boolean? @default(false)
+  insertedAt DateTime @default(now())
+  servers Server[] @relation(fields: [serverId], references: [id])
+  serverId String
+}
+
+model Server {
+  id     String @id @unique
+  idDiscord String @unique
+  name String
+  users User[]
+  prefix String
 }
