@@ -28,4 +28,5 @@ model Server {
   name String
   users User[]
   prefix String
+  insertedAt DateTime @default(now())
 }

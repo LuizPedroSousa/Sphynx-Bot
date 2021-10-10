@@ -6,11 +6,11 @@ export class Server {
   public readonly id: string;
   public idDiscord: string;
   public name: string;
-  public prefix?: String;
+  public prefix: string;
   public readonly insertedAt: Date;
-  public users?: User[];
+  public users: User[];
 
-  constructor(props: Omit<Server, "id" | "insertedAt">) {
+  constructor(props: Omit<Server, "id" | "insertedAt" | "prefix" | "users">) {
     Object.assign(this, props);
 
     if (!this.prefix) {

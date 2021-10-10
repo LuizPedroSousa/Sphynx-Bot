@@ -1,13 +1,30 @@
 import { Command } from "@/entities/Command";
-import { ICommand } from "@/interfaces/ICommand";
-import { Message } from "discord.js/typings/index.js";
+import { ExecuteCommandData, ICommand } from "@/interfaces/ICommand";
 import { PingCommandInfo } from "./PingCommandInfo";
+import { PingCommandView } from "./PingCommandView";
 
 export class PingCommand implements ICommand {
-  constructor(private pingCommandInfo: PingCommandInfo) {}
+  private pingCommandInfo: PingCommandInfo;
+  private pingCommandView: PingCommandView;
+  constructor() {
+    this.pingCommandInfo = new PingCommandInfo();
+    this.pingCommandView = new PingCommandView();
+  }
 
-  execute(message: Message, args: string[]): Command {
+  info(): Command {
     const commandInfo = this.pingCommandInfo.execute();
     return commandInfo;
+  }
+
+  execute({ message }: ExecuteCommandData): void {
+    const { shards } = message.client.ws;
+
+    const currentShard = shards.find(
+      (shard) => shard.id === message?.guild?.shardId
+    );
+
+    const response = this.pingCommandView.render({ currentShard, message });
+
+    message.reply(response);
   }
 }

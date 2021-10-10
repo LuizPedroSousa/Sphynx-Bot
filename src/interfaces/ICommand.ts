@@ -1,10 +1,14 @@
 import { Command } from "@/entities/Command";
 import { Message } from "discord.js/typings/index.js";
 
+export interface ExecuteCommandData {
+  message: Message;
+  args: string[];
+  prefix?: string;
+}
+
 export interface ICommand {
-  execute(
-    message: Message,
-    args: string[],
-    prefix?: string
-  ): Promise<Command> | Command;
+  info(): Command;
+  execute(data: ExecuteCommandData): Promise<void> | void;
+  validate?(): Promise<boolean>;
 }

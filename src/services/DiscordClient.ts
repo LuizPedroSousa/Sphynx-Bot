@@ -1,12 +1,12 @@
+process.env["NODE_CONFIG_DIR"] = __dirname + "/../config";
 import { commands } from "@/commands";
-import { discordClientConfig } from "@/configs/discordClientConfig";
+import { discordClientConfig } from "@/config/discordClientConfig";
 import { events } from "@/events";
 import { HttpException } from "@/exceptions/HttpException";
 import { ICommand } from "@/interfaces/ICommand";
-import { IDiscordEvent } from "@/interfaces/IDiscordEvent";
+import { DiscordEventData, IDiscordEvent } from "@/interfaces/IDiscordEvent";
 import logger from "@/utils/logger";
 import { Client, Message } from "discord.js";
-
 import { config } from "dotenv";
 
 export class DiscordClient {
@@ -41,7 +41,10 @@ export class DiscordClient {
         });
       } else {
         this.client.on(eventInfo.name as any, (args: any) => {
-          let props: any = { client: this.client };
+          let props: DiscordEventData = {
+            client: this.client,
+            commands: this.commands,
+          };
 
           if (args.author) {
             props["message"] = args;
