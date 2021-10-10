@@ -1,6 +1,6 @@
 import { ICommand } from "@/interfaces/ICommand";
-import { pingCommandUseCase } from "./PingCommand";
+import { pingCommand } from "./ping";
 
-const commands: ICommand[] = [pingCommandUseCase];
+const commands: ICommand[] = [pingCommand];
 
 export { commands };
