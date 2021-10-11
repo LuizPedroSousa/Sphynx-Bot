@@ -1,15 +1,14 @@
 import { DiscordEvent } from "@/entities/DiscordEvent";
 import { DiscordEventData, IDiscordEvent } from "@/interfaces/IDiscordEvent";
-import { Client } from "discord.js/typings/index.js";
 import Logger from "@utils/logger";
 import { ReadyEventInfo } from "./ReadyEventInfo";
 import { HttpException } from "@/exceptions/HttpException";
 
 export class ReadyEvent implements IDiscordEvent {
-  constructor(
-    private readyEventInfo: ReadyEventInfo,
-    private logger: typeof Logger
-  ) {}
+  private readyEventInfo: ReadyEventInfo;
+  constructor(private logger: typeof Logger) {
+    this.readyEventInfo = new ReadyEventInfo();
+  }
 
   info(): DiscordEvent {
     const readyEventInfo = this.readyEventInfo.execute();
@@ -20,6 +19,22 @@ export class ReadyEvent implements IDiscordEvent {
     if (!client?.user) {
       throw new HttpException({ message: "Discord user unavailable" });
     }
+
+    setInterval(() => {
+      const botStatus = [
+        "Socorro",
+        "quem inventou JS?",
+        "HMM café docin ☕",
+        "AAAAAAAAAAAAAA",
+      ];
+
+      client?.user?.setActivity(
+        botStatus[Math.floor(botStatus.length * Math.random())],
+        {
+          type: "STREAMING",
+        }
+      );
+    }, 10000);
 
     this.logger.success(
       `Logado como: ${client.user.tag}, para ${client.guilds.cache.size} servidores`

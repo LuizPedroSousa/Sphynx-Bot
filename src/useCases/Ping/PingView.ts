@@ -1,4 +1,4 @@
-import { PingResponseDTO } from "@/dtos/PingDTO";
+import { PingResponseDTO } from "@/useCases/Ping/PingDTO";
 
 export class PingView {
   render() {
