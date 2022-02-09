@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  sphynx-bot:
+    build:
+      context: .
+      target: development-build-stage
+      dockerfile: Docker/bot/Dockerfile
+    container_name: sphynx-bot
+    restart: "unless-stopped"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    links:
+      - mongo
+    depends_on:
+      - mongo
+  postgres:
+    image: postgres
+    # volumes:
+    #   - ./scripts/postgres/init_sql.sh:/docker-entrypoint-initdb.d/init_sql.sh
+    container_name: sphynx_postgres
+    environment:
+      PUID: 1000
+      PGID: 1000
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DATABASE: "sphynx"
+    ports:
+      - "5432:5432"
+  mongo:
+    image: mongo
+    container_name: sphynx_mongo
+    restart: "unless-stopped"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+      MONGO_INITDB_ROOT_DATABASE: "sphynx"
+      MONGO_USER: $MONGODB_USER
+      MONGODB_PASSWORD: $MONGODB_PASSWORD
+    ports:
+      - "27017:27017"
+  redis:
+    image: redis
+    command: redis-server
+    container_name: redis
+    ports:
+      - "6379:6379"

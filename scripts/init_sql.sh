@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+  CREATE DATABASE sphynx;
+  GRANT ALL PRIVILEGES ON DATABASE sphynx TO $POSTGRES_USER;
+EOSQL
